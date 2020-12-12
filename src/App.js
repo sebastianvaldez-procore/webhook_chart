@@ -1,22 +1,12 @@
 import React from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper'
-import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-
-
+import { Chart } from './Chart';
+import PayloadField from './PayloadField';
 
 function App() {
-  const [payload, setPayload] = React.useState('')
-
-  const handlePayload = (e) => {
-    e.preventDefault()
-    alert(`payload is: ${payload}`)
-  }
   return (
     <>
       <CssBaseline />
@@ -28,26 +18,12 @@ function App() {
           </Typography>
         </Grid>
 
-          <Grid item xs={2} md={2} lg={2}/>
-          
-          <Grid item align='center' xs={8} md={8} lg={8}>
-            <form onSubmit={handlePayload}>
-              <TextField
-              multiline
-              variant="outlined"
-              fullWidth
-              label='Webhook JSON'
-              onChange={e => setPayload(e.target.value)}
-              value={payload}
-              placeholder="Paste Webhook delivery payload here...."
-              />
-              <br />
-              <Button type='submit' disabled={payload !== '' ? false : true} color='primary'>Chart Webhook Deliveries</Button>
-            </form>            
-          </Grid>
-
-          <Grid item xs={2} md={2} lg={2}/>
-
+        <Router>
+          <Switch>
+            <Route exact path='/' component={PayloadField} />
+            <Route path='/chart' component={Chart} />
+          </Switch>
+        </Router> 
       </Grid>
     </>
   );
