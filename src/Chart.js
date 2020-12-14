@@ -5,7 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
-export function Chart() {
+export function Chart(props) {
+  const data = props.location.state
   return (
     <>
       <Link to='/'>
@@ -13,12 +14,16 @@ export function Chart() {
           <Button color='primary'>&lt; Back</Button>
         </Typography>
       </Link>
+
       <Grid container justify='center'>
         <Grid item xs={8} md={8} lg={8}>
           <Paper>
             <Typography>
-              CHART....
+            chart...
           </Typography>
+          <pre>
+            {data}
+          </pre>
           </Paper>
         </Grid>
       </Grid>

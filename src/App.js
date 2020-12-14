@@ -3,10 +3,17 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
+
+import PayloadContext from './contexts/PayloadContext'
 import { Chart } from './Chart';
 import PayloadField from './PayloadField';
 
+
+
 function App() {
+  const [data, setData ] = React.useState({})
+  const value = {data , setData}
+
   return (
     <>
       <CssBaseline />
@@ -20,8 +27,10 @@ function App() {
 
         <Router>
           <Switch>
-            <Route exact path='/' component={PayloadField} />
-            <Route path='/chart' component={Chart} />
+            <PayloadContext.Provider value={ value }>
+              <Route exact path='/' component={PayloadField} />
+              <Route path='/chart' component={Chart} />
+            </PayloadContext.Provider>
           </Switch>
         </Router> 
       </Grid>
