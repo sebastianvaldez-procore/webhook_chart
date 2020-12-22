@@ -12,7 +12,7 @@ import PayloadField from './PayloadField';
 function App() {
   return (
     <>
-      <CssBaseline />
+      <CssBaseline />t
       <Grid container justify='center' alignItems="center" spacing={2}>
 
         <Grid item xs={12} md={12} lg={12}>
@@ -21,10 +21,11 @@ function App() {
           </Typography>
         </Grid>
 
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
           <Switch>
             <Route exact path='/' component={PayloadField} />
             <Route path='/chart' component={Chart} />
+            <Route render={ () => <Typography variant='h2'>404 Not found.</Typography>} />
           </Switch>
         </Router> 
       </Grid>
