@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/webhook_chart/static/css/main.6dea0f05.chunk.css",
-    "main.js": "/webhook_chart/static/js/main.8ca18557.chunk.js",
-    "main.js.map": "/webhook_chart/static/js/main.8ca18557.chunk.js.map",
+    "main.js": "/webhook_chart/static/js/main.773622f0.chunk.js",
+    "main.js.map": "/webhook_chart/static/js/main.773622f0.chunk.js.map",
     "runtime-main.js": "/webhook_chart/static/js/runtime-main.a1ecdda8.js",
     "runtime-main.js.map": "/webhook_chart/static/js/runtime-main.a1ecdda8.js.map",
     "static/js/2.0e3008d1.chunk.js": "/webhook_chart/static/js/2.0e3008d1.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.a1ecdda8.js",
     "static/js/2.0e3008d1.chunk.js",
     "static/css/main.6dea0f05.chunk.css",
-    "static/js/main.8ca18557.chunk.js"
+    "static/js/main.773622f0.chunk.js"
   ]
 }
