@@ -9,10 +9,11 @@ export default function PayloadField({ history }) {
 
   const handlePayload = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     console.log('handlePayload...')
     history.push({
       pathname: '/chart',
-      state: payload,
+      state: JSON.parse(payload)
     })
   };
   const resetPayload = () => setPayload('');
