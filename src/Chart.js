@@ -86,8 +86,7 @@ export function Chart(props) {
 
   const resetBrush = () => setBrushState({min: null, max: null})
 
-  const handleToggle = () => setToggle(t => !t) //! debug, can remove
-
+  // todo add filers for N types of projects
   return (
     <>
       <Link to='/'>
@@ -106,14 +105,14 @@ export function Chart(props) {
           }}>
 
           <Tooltip title='Reset zoom'>
-            <IconButton disabled={max === null && min === null} onClick={resetBrush} aria-label="reset zoom" color="primary">
+            <IconButton component='div' disabled={max === null && min === null} onClick={resetBrush} aria-label="reset zoom" color="primary">
               <RefreshIcon />
             </IconButton>
           </Tooltip>
 
             <ReactChart data={currentSelection} axes={axes} series={series} primaryCursor={{showLabel: true}} tooltip brush={brush} />
           </div>
-          <button onClick={handleToggle}>{toggle === true ? 'Hide JSON' : 'Show JSON'}</button>
+          {/* <button onClick={handleToggle}>{toggle === true ? 'Hide JSON' : 'Show JSON'}</button> */}
           {toggle && <pre>{JSON.stringify(currentSelection, null, 2)}</pre> }
           </Paper>
         </Grid>
