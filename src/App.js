@@ -12,7 +12,7 @@ import PayloadField from './PayloadField';
 function App() {
   return (
     <>
-      <CssBaseline />t
+      <CssBaseline />
       <Grid container justify='center' alignItems="center" spacing={2}>
 
         <Grid item xs={12} md={12} lg={12}>
