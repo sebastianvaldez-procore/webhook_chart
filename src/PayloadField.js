@@ -20,6 +20,7 @@ export default function PayloadField({ history }) {
 
   return (
     <>
+    <Grid container>
       <Grid item xs={2} md={2} lg={2} />
         <Grid item align='center' xs={8} md={8} lg={8}>
           <form onSubmit={handlePayload}>
@@ -40,6 +41,7 @@ export default function PayloadField({ history }) {
           </form>
         </Grid>
       <Grid item xs={2} md={2} lg={2} />
+    </Grid>
     </>
   );
 }
