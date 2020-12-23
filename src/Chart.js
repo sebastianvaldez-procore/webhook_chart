@@ -6,9 +6,16 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Chart as ReactChart } from 'react-charts'
 import moment from 'moment'
+
+import ResizableBox from "./ResizableBox";
+
 
 function dateRanges(dates) {
   const moments = dates.map(d => moment(d))
@@ -53,7 +60,6 @@ export function Chart(props) {
     )
 
     setCurrenSelection([{label: 'webhook durations', data: finalData}])
-    console.log('useEffect chart')
   }, [deliveries])
   
   const axes = React.useMemo(
@@ -62,7 +68,7 @@ export function Chart(props) {
         primary: true,
         type: 'utc',
         position: 'bottom',
-        tickValues: dateTicks,
+        // tickValues: dateTicks,
         hardMin: min,
         hardMax: max,
       },
@@ -89,32 +95,38 @@ export function Chart(props) {
   // todo add filers for N types of projects
   return (
     <>
-      <Link to='/'>
-        <Typography>
-          <Button color='primary'>&lt; Back</Button>
-        </Typography>
-      </Link>
+      <Grid container direction='column' alignContent='center' justify='center' spacing={2}>
+        <Grid xs={8} md={8} lg={8}>
+          <Link to='/'>
+              <Typography>
+                <Button color='primary'>&lt; Back</Button>
+              </Typography>
+          </Link>
+        </Grid>
+        <Grid container item alignItems='center' justify='flex-start' xs={3} md={3} lg={3} spacing={2}>
+          <Grid item xs={4} md={4} lg={4}>
+            <Tooltip title='Reset zoom'>
+              <IconButton component='div' disabled={max === null && min === null} onClick={resetBrush} aria-label="reset zoom" color="primary">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip> 
+          </Grid>
+          <Grid item xs={8} md={8} lg={8}>
+            {/* <InputLabel>Resource Type</InputLabel>
+            <FormControl>
+              <Select>
+                <MenuItem value={'all'}>All</MenuItem>
+                <MenuItem value={'projects'}>Projects</MenuItem>
+                <MenuItem value={'commitments'}>Commitments</MenuItem>
+              </Select>
+              </FormControl> */}
+          </Grid>
+        </Grid>
 
-      <Grid container justify='center'>
-        <Grid item xs={8} md={8} lg={8}>
-          <Paper>
-          <div
-            style={{
-            width: '960px',
-            height: '800px',
-          }}>
-
-          <Tooltip title='Reset zoom'>
-            <IconButton component='div' disabled={max === null && min === null} onClick={resetBrush} aria-label="reset zoom" color="primary">
-              <RefreshIcon />
-            </IconButton>
-          </Tooltip>
-
+        <Grid item align='center' xs={12} md={12} lg={12}>
+          <ResizableBox width='900' style={{ padding: '.5rem'}}>
             <ReactChart data={currentSelection} axes={axes} series={series} primaryCursor={{showLabel: true}} tooltip brush={brush} />
-          </div>
-          {/* <button onClick={handleToggle}>{toggle === true ? 'Hide JSON' : 'Show JSON'}</button> */}
-          {toggle && <pre>{JSON.stringify(currentSelection, null, 2)}</pre> }
-          </Paper>
+          </ResizableBox>
         </Grid>
       </Grid>
     </>
