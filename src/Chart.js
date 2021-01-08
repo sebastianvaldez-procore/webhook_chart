@@ -41,13 +41,11 @@ export function Chart(props) {
     min: null,
     max: null,
   });
-  const deliveries = props.location.state
-
+  const deliveries = props.location.state 
   React.useEffect(() => {
     // id, completed_at, response_status, event, started_at
     const events = deliveries.map(({ id, completed_at, response_status, event, started_at }) => ({ id, completed_at, response_status, ...event, started_at }))
-    
-    
+
     // create a duration key calculated from completed_at and start_at, return object that with keys for axsis
     const finalData =
     events.map((event) => {
@@ -80,7 +78,6 @@ export function Chart(props) {
   const brush = React.useMemo(
     () => ({
       onSelect: (brushData) => {
-        console.log(brushData);
         setBrushState({
           min: Math.min(brushData.start, brushData.end),
           max: Math.max(brushData.start, brushData.end),
@@ -91,7 +88,6 @@ export function Chart(props) {
   );
 
   const resetBrush = () => setBrushState({min: null, max: null})
-
   // todo add filers for N types of projects
   return (
     <>
@@ -111,16 +107,8 @@ export function Chart(props) {
               </IconButton>
             </Tooltip> 
           </Grid>
-          <Grid item xs={8} md={8} lg={8}>
-            {/* <InputLabel>Resource Type</InputLabel>
-            <FormControl>
-              <Select>
-                <MenuItem value={'all'}>All</MenuItem>
-                <MenuItem value={'projects'}>Projects</MenuItem>
-                <MenuItem value={'commitments'}>Commitments</MenuItem>
-              </Select>
-              </FormControl> */}
-          </Grid>
+          {/* <Grid item xs={8} md={8} lg={8}>
+          </Grid> */}
         </Grid>
 
         <Grid item align='center' xs={12} md={12} lg={12}>
