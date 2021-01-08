@@ -8,26 +8,10 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import Settings from '@material-ui/icons/Settings';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Chart as ReactChart } from 'react-charts'
-import moment from 'moment'
 
 import ResizableBox from "./ResizableBox";
 import { FilterControl } from './FilterControl';
-
-function dateRanges(dates) {
-  const moments = dates.map(d => moment(d))
-  const startDate = moment.min(moments)
-  const endDate = moment.max(moments)
- 
-  var range = [];
-  var currDate = moment(startDate).startOf('day');
-  var lastDate = moment(endDate).startOf('day');
-
-  while(currDate.add(1, 'days').diff(lastDate) < 0) {
-      range.push(currDate.clone().toISOString());
-  }
-
-  return range;
-}
+import { dateRanges } from './utils/dateRanges';
 
 export function Chart(props) {
   const [ control, setControl ] = React.useState(false)
