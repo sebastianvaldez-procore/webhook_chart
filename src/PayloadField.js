@@ -2,42 +2,108 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import { Controller, useForm } from 'react-hook-form'
+import { verify } from 'verify-json'
+
+const webhookSchema = `
+[
+  {
+    "event": {
+      "user_id": integer,
+      "timestamp": string,
+      "resource_name": string,
+      "resource_id": integer,
+      "project_id": integer,
+      "id": integer,
+      "ulid": string,
+      "event_type": string,
+      "company_id": integer,
+      "api_version": string,
+      "metadata": {
+        "source_user_id": integer,
+        "source_company_id": integer,
+        "source_project_id": integer,
+        "source_application_id": string,
+        "source_operation_id": string
+      }
+    },
+    "event_id": integer,
+    "outcome": string,
+    "response_body": string,
+    "response_error": string,
+    "started_at": string,
+    "completed_at": string,
+    "response_status": integer,
+    "response_headers": {}
+  }
+]
+`
+
+const defaultValues = {
+  WebhookPayload: ''
+}
 
 export default function PayloadField({ history }) {
+  const [ jsonError, setJsonError ] = React.useState(null)
+  const { handleSubmit, control, reset } = useForm({defaultValues})
 
-  const [payload, setPayload] = React.useState('');
-
-  const handlePayload = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('handlePayload...')
+  const isValidJson = json => {
+    try {
+      
+      if ( JSON.parse(json) ) {
+        setJsonError(null)
+        return true
+      } else {
+        throw(json)
+      }
+    }
+    catch(error) {
+      console.log(JSON.stringify(error, null, 2))
+      setJsonError(true)
+      return false
+    }
+  }
+  const handlePayload = ({WebhookPayload}) => {
+    console.log('handlePayload...', WebhookPayload)
     history.push({
       pathname: '/chart',
-      state: JSON.parse(payload)
+      state: JSON.parse(WebhookPayload)
     })
   };
-  const resetPayload = () => setPayload('');
 
   return (
     <>
     <Grid container>
       <Grid item xs={2} md={2} lg={2} />
         <Grid item align='center' xs={8} md={8} lg={8}>
-          <form onSubmit={handlePayload}>
-            <TextField
-              multiline
-              variant="outlined"
-              fullWidth
-              label='Webhook JSON'
-              onChange={e => setPayload(e.target.value)}
-              value={payload}
-              rows={8}
-              placeholder="Paste Webhook delivery payload here...." />
+          <form onSubmit={handleSubmit(handlePayload)}>
+            <Controller
+              name="WebhookPayload"
+              control={control}
+              rules={{
+                validate: isValidJson
+              }}
+              as={
+                <TextField
+                error={jsonError}
+                helperText={jsonError ? 'Not valid JSON' : ''}
+                placeholder="Paste Webhook delivery payload here...." 
+                multiline
+                variant="outlined"
+                fullWidth
+                label='Webhook JSON'
+                rows={8}
+                />                
+              }
+            />
             <br />
-              <Button type='submit' disabled={payload !== '' ? false : true} color='primary'>
+              <Button type='submit' color='primary'>
                   Chart Webhook Deliveries
               </Button>
-              <Button onClick={resetPayload} type='reset' color='secondary'>Cancel</Button>
+              <Button onClick={() => {
+                reset(defaultValues)
+                setJsonError(null)
+              }} type='reset' color='secondary'>Cancel</Button>
           </form>
         </Grid>
       <Grid item xs={2} md={2} lg={2} />
