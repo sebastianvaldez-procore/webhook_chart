@@ -11,11 +11,9 @@ import { Chart as ReactChart } from 'react-charts'
 
 import ResizableBox from "./ResizableBox";
 import { FilterControl } from './FilterControl';
-import { dateRanges } from './utils/dateRanges';
 
 export function Chart(props) {
   const [ control, setControl ] = React.useState(false)
-  const [ dateTicks, setDateTicks ] = React.useState([])
   const [ currentSelection, setCurrenSelection ] = React.useState({})
   const [{ min, max }, setBrushState] = React.useState({
     min: null,
@@ -33,10 +31,6 @@ export function Chart(props) {
       return { primary: new Date(event.timestamp), secondary: event.time_total, radius: (event.time_total * 1.5), ...event }
     } , {})
 
-    setDateTicks(
-      dateRanges(events.map(e => e.timestamp))
-    )
-
     setCurrenSelection([{label: 'webhook durations', data: finalData}])
   }, [deliveries])
   
@@ -46,12 +40,11 @@ export function Chart(props) {
         primary: true,
         type: 'utc',
         position: 'bottom',
-        // tickValues: dateTicks,
         hardMin: min,
         hardMax: max,
       },
     { type: 'linear', position: 'left' },
-  ], [dateTicks, min, max])
+  ], [min, max])
 
   const series = React.useMemo(() => ({ type: 'bubble' }), [])
 
