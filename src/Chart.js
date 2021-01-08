@@ -1,21 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import Settings from '@material-ui/icons/Settings';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Chart as ReactChart } from 'react-charts'
 import moment from 'moment'
 
 import ResizableBox from "./ResizableBox";
-
+import { FilterControl } from './FilterControl';
 
 function dateRanges(dates) {
   const moments = dates.map(d => moment(d))
@@ -34,7 +30,7 @@ function dateRanges(dates) {
 }
 
 export function Chart(props) {
-  const [ toggle, setToggle ] = React.useState(false)
+  const [ control, setControl ] = React.useState(false)
   const [ dateTicks, setDateTicks ] = React.useState([])
   const [ currentSelection, setCurrenSelection ] = React.useState({})
   const [{ min, max }, setBrushState] = React.useState({
@@ -88,7 +84,6 @@ export function Chart(props) {
   );
 
   const resetBrush = () => setBrushState({min: null, max: null})
-  // todo add filers for N types of projects
   return (
     <>
       <Grid container direction='column' alignContent='center' justify='center' spacing={2}>
@@ -99,6 +94,16 @@ export function Chart(props) {
               </Typography>
           </Link>
         </Grid>
+
+          <Grid item xs={8} md={8} lg={8}>
+            <Tooltip title='Filter Controls'>
+              <IconButton component='div' onClick={() => setControl(!control)} aria-label="Toggle Filter controls" color="primary">
+                <Settings />
+              </IconButton>
+            </Tooltip> 
+            { control && (<FilterControl />)}
+          </Grid>
+
         <Grid container item alignItems='center' justify='flex-start' xs={3} md={3} lg={3} spacing={2}>
           <Grid item xs={4} md={4} lg={4}>
             <Tooltip title='Reset zoom'>
@@ -107,8 +112,6 @@ export function Chart(props) {
               </IconButton>
             </Tooltip> 
           </Grid>
-          {/* <Grid item xs={8} md={8} lg={8}>
-          </Grid> */}
         </Grid>
 
         <Grid item align='center' xs={12} md={12} lg={12}>
