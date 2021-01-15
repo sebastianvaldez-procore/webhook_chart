@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import { Controller, useForm } from 'react-hook-form'
 import { verify } from 'verify-json'
 
+import { useChartDispatch } from './contexts/ChartContext'
+
 const webhookSchema = `
 [
   {
@@ -44,6 +46,7 @@ const defaultValues = {
 }
 
 export default function PayloadField({ history }) {
+  const chartDispatch = useChartDispatch()
   const [ jsonError, setJsonError ] = React.useState(null)
   const { handleSubmit, control, reset } = useForm({defaultValues})
 
@@ -52,6 +55,7 @@ export default function PayloadField({ history }) {
       
       if ( JSON.parse(json) ) {
         setJsonError(null)
+        chartDispatch({type: 'success', data: json })
         return true
       } else {
         throw(json)

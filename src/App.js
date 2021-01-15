@@ -4,6 +4,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { ChartProvider } from './contexts/ChartContext'
 import { Chart } from './Chart';
 import PayloadField from './PayloadField';
 
@@ -28,11 +30,13 @@ function App() {
       </Grid>
 
         <Router basename={process.env.PUBLIC_URL}>
+          <ChartProvider>
           <Switch>
             <Route exact path='/' component={PayloadField} />
             <Route path='/chart' component={Chart} />
             <Route render={ () => <Typography variant='h2'>404 Not found.</Typography>} />
           </Switch>
+          </ChartProvider>
         </Router> 
       </div>
     </>
