@@ -9,8 +9,11 @@ function chartReducer( state, action) {
     case 'validJSON': {
       return { ...state, chartData: JSON.parse(action.data) }
     }
+    case 'clearJSON': {
+      console.log('clear json')
+      return { ...state, chartData: null }
+    }
     case 'toggleFilterBar': {
-      console.log('toggleFilterBar reducer ran')
       return {...state, showFilterBar: !state.showFilterBar }
     }
     default: {
