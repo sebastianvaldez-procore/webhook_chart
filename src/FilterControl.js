@@ -5,14 +5,21 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
+import { useChartDispatch } from './contexts/ChartContext'
 
 const useStyles = makeStyles({
   formControl: {
     minWidth: 120,
+    padding: '.5rem'
   }
 });
 
 export function FilterControl() {
+  const chartDispatch = useChartDispatch()
   const classes = useStyles();
   return (
     <>
@@ -50,6 +57,14 @@ export function FilterControl() {
             </Select>
           </FormControl>
         </Grid>
+
+        <Grid style={{border: '2px red solid'}} item xs={1} md={1} lg={1}>
+          <Tooltip title='Close Filter Options'>
+            <IconButton component='div' onClick={() => chartDispatch({ type: 'toggleFilterBar' })} aria-label="Close Filter Options" color="primary">
+              <CloseIcon />
+            </IconButton>
+          </Tooltip> 
+        </Grid>      
       </Grid>
     </>
   );
