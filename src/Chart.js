@@ -71,17 +71,18 @@ function ChartNavigator({min, max, handleBrush}) {
 
 export function Chart(props) {
   const chartState = useChartState()
-  const { showFilterBar } = chartState
+  const { chartData, showFilterBar } = chartState
 
   const [ currentSelection, setCurrenSelection ] = React.useState({})
   const [{ min, max }, setBrushState] = React.useState({
     min: null,
     max: null,
   });
-  const deliveries = props.location.state 
+  // const deliveries = props.location.state 
   React.useEffect(() => {
+    if ( chartData === undefined ) return null
     // id, completed_at, response_status, event, started_at
-    const events = deliveries.map(({ id, completed_at, response_status, event, started_at }) => ({ id, completed_at, response_status, ...event, started_at }))
+    const events = chartData.map(({ id, completed_at, response_status, event, started_at }) => ({ id, completed_at, response_status, ...event, started_at }))
 
     // create a duration key calculated from completed_at and start_at, return object that with keys for axsis
     const finalData =
@@ -91,7 +92,7 @@ export function Chart(props) {
     } , {})
 
     setCurrenSelection([{label: 'webhook durations', data: finalData}])
-  }, [deliveries])
+  }, [chartData])
   
   const axes = React.useMemo(
     () => [

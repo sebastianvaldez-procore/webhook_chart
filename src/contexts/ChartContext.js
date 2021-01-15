@@ -6,9 +6,8 @@ const ChartDispatchContext = React.createContext()
 
 function chartReducer( state, action) {
   switch(action.type) {
-    case 'success': {
-      console.log('success reducer ran')
-      return {}
+    case 'validJSON': {
+      return { ...state, chartData: JSON.parse(action.data) }
     }
     case 'toggleFilterBar': {
       console.log('toggleFilterBar reducer ran')

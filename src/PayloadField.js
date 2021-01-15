@@ -55,7 +55,7 @@ export default function PayloadField({ history }) {
       
       if ( JSON.parse(json) ) {
         setJsonError(null)
-        chartDispatch({type: 'success', data: json })
+        chartDispatch({type: 'validJSON', data: json })
         return true
       } else {
         throw(json)
@@ -68,7 +68,7 @@ export default function PayloadField({ history }) {
     }
   }
   const handlePayload = ({WebhookPayload}) => {
-    console.log('handlePayload...', WebhookPayload)
+    // console.log('handlePayload...', WebhookPayload)
     history.push({
       pathname: '/chart',
       state: JSON.parse(WebhookPayload)
