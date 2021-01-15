@@ -37,7 +37,7 @@ function ChartNavigator({min, max, handleBrush}) {
   const handleFilterBar = () => {
     chartDispatch({ type: 'toggleFilterBar' })
   }
-
+  const clearPayload = () => chartDispatch({ type: 'clearJSON'})
   // console.log(`char nav: \n ${JSON.stringify(chartState, null, 2)}`)
 
   return (
@@ -45,7 +45,7 @@ function ChartNavigator({min, max, handleBrush}) {
         <Grid style={{border: '2px red solid'}} item xs={4} md={4} lg={4}>
           <Link to='/'>
               <Typography>
-                <Button color='primary'>&lt; Back</Button>
+                <Button color='primary' onClick={clearPayload}>&lt; Back</Button>
               </Typography>
           </Link>
         </Grid>
