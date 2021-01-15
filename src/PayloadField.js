@@ -1,45 +1,11 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom'
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { Controller, useForm } from 'react-hook-form'
-import { verify } from 'verify-json'
 
-import { useChartDispatch } from './contexts/ChartContext'
-
-const webhookSchema = `
-[
-  {
-    "event": {
-      "user_id": integer,
-      "timestamp": string,
-      "resource_name": string,
-      "resource_id": integer,
-      "project_id": integer,
-      "id": integer,
-      "ulid": string,
-      "event_type": string,
-      "company_id": integer,
-      "api_version": string,
-      "metadata": {
-        "source_user_id": integer,
-        "source_company_id": integer,
-        "source_project_id": integer,
-        "source_application_id": string,
-        "source_operation_id": string
-      }
-    },
-    "event_id": integer,
-    "outcome": string,
-    "response_body": string,
-    "response_error": string,
-    "started_at": string,
-    "completed_at": string,
-    "response_status": integer,
-    "response_headers": {}
-  }
-]
-`
+import { useChartDispatch, useChartState } from './contexts/ChartContext'
 
 const defaultValues = {
   WebhookPayload: ''
@@ -47,15 +13,20 @@ const defaultValues = {
 
 export default function PayloadField({ history }) {
   const chartDispatch = useChartDispatch()
+  const chartState = useChartState()
+  const { chartData } = chartState
+
   const [ jsonError, setJsonError ] = React.useState(null)
   const { handleSubmit, control, reset } = useForm({defaultValues})
 
+  if ( chartData !== undefined && chartData !== null ) {
+    return <Redirect to='/chart' />
+  }
+
   const isValidJson = json => {
     try {
-      
       if ( JSON.parse(json) ) {
         setJsonError(null)
-        chartDispatch({type: 'validJSON', data: json })
         return true
       } else {
         throw(json)
@@ -67,12 +38,9 @@ export default function PayloadField({ history }) {
       return false
     }
   }
+
   const handlePayload = ({WebhookPayload}) => {
-    // console.log('handlePayload...', WebhookPayload)
-    history.push({
-      pathname: '/chart',
-      state: JSON.parse(WebhookPayload)
-    })
+    chartDispatch({type: 'validJSON', data: WebhookPayload })
   };
 
   return (
