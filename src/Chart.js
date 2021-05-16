@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -37,8 +37,8 @@ function ChartNavigator({min, max, handleBrush}) {
   const handleFilterBar = () => {
     chartDispatch({ type: 'toggleFilterBar' })
   }
+
   const clearPayload = () => chartDispatch({ type: 'clearJSON'})
-  // console.log(`char nav: \n ${JSON.stringify(chartState, null, 2)}`)
 
   return (
       <Grid className={classes.Grid} container direction='column' justify='center' align='center' spacing={1}>
@@ -78,9 +78,13 @@ export function Chart(props) {
     min: null,
     max: null,
   });
-  // const deliveries = props.location.state 
+
   React.useEffect(() => {
-    if ( chartData === undefined ) return null
+    if ( chartData === undefined ) {
+      console.log('chart redirect to / ', chartData);
+      return <Redirect to='/' />
+    }
+
     // id, completed_at, response_status, event, started_at
     const events = chartData.map(({ id, completed_at, response_status, event, started_at }) => ({ id, completed_at, response_status, ...event, started_at }))
 
@@ -93,7 +97,7 @@ export function Chart(props) {
 
     setCurrenSelection([{label: 'webhook durations', data: finalData}])
   }, [chartData])
-  
+
   const axes = React.useMemo(
     () => [
       {
@@ -118,7 +122,7 @@ export function Chart(props) {
       },
     }),
     []
-  );  
+  );
 
   return (
     <>
