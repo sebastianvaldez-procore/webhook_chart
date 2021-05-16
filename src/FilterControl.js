@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash'
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { useChartDispatch } from './contexts/ChartContext'
+import { useChartState, useChartDispatch } from './contexts/ChartContext'
 
 const useStyles = makeStyles({
   formControl: {
@@ -18,19 +19,65 @@ const useStyles = makeStyles({
   }
 });
 
+
 export function FilterControl() {
+  const chartState = useChartState()
+  const { chartData } = chartState
   const chartDispatch = useChartDispatch()
   const classes = useStyles();
+  
+ /*todo
+
+the reduce below flattens a singel event obj
+I think I need to when the payload is loaded into the context
+is generate a filter obj that has keys of filter obj and the valu is a array of uniq
+results I got 
+
+I may even consider flattening the event object just to make filtering easier
+
+// ? I also think this filterControll should only dispatch the new filter filterSelections
+// ? it could read the uniq types, and create the selection and then dispatch the new selection
+
+
+ then I can say:
+ useEffect( () => {
+    filterJSON = inputJSON.filterBy (  all my selections  ) 
+    dispatch({ type: 'newFilter', filerJSON })
+  }, [ filterSelections ])
+
+  // ! below , .reduce is not a function ????
+  const filteredChartState = 
+    chartState.reduce((acc, obj) => {
+      const {event: { event_type, resource_name }, response_status, outcome} = obj
+      acc.push({event_type, resource_name, response_status, outcome})
+      return acc
+    }, [])
+ */
+  const handleResourceName = (e) => {
+    console.log(`${e.target.value} was clicked for filter`)
+    chartDispatch({ type: 'setFilter', filters: { resourceName: e.target.value } })
+  }
+  const handleEventType = (e) => {
+    console.log(`${e.target.value} was clicked for filter`)
+    chartDispatch({ type: 'setFilter', filters: { eventType: e.target.value} })
+  }
+  const handleOutcome = (e) => {
+    console.log(`${e.target.value} was clicked for filter`)
+    chartDispatch({ type: 'setFilter', filters: { outcome: e.target.value} })
+  }
+
+  console.log(JSON.stringify(chartState.filters, null, 2))
   return (
     <>
       <Grid style={{ border: '2px solid red' }} container item justify="space-evenly" alignItems='center' xs={12} md={12} lg={12}>
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel>Resource Name</InputLabel>
-            <Select>
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="project">Project</MenuItem>
-              <MenuItem value="commitment">Commitment</MenuItem>
+            <Select onChange={handleResourceName}>
+              <MenuItem value="none"><em>None</em></MenuItem>
+              {chartState.resourceNames.map( (r,i) => (
+                <MenuItem key={i} value={r}>{r}</MenuItem> )
+              )}
             </Select>
           </FormControl>
         </Grid>
@@ -38,11 +85,9 @@ export function FilterControl() {
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel>Event Type</InputLabel>
-            <Select>
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="create">Create</MenuItem>
-              <MenuItem value="update">Update</MenuItem>
-              <MenuItem value="delete">Delete</MenuItem>
+            <Select onChange={handleEventType}>
+              <MenuItem value="none"><em>None</em></MenuItem>
+              {chartState.eventTypes.map( (t,i) => ( <MenuItem key={i} value={t}>{t}</MenuItem> ))}
             </Select>
           </FormControl>
         </Grid>
@@ -50,10 +95,9 @@ export function FilterControl() {
         <Grid item>
           <FormControl className={classes.formControl}>
             <InputLabel>Event Outcome</InputLabel>
-            <Select>
-              <MenuItem value=""><em>None</em></MenuItem>
-              <MenuItem value="retried">Retried</MenuItem>
-              <MenuItem value="ok">Ok</MenuItem>
+            <Select onChange={handleOutcome}>
+              <MenuItem value="none"><em>None</em></MenuItem>
+              {chartState.outcome.map( (o,i) => ( <MenuItem key={i} value={o}>{o}</MenuItem> ))}
             </Select>
           </FormControl>
         </Grid>
